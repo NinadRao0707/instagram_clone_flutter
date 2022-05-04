@@ -82,7 +82,7 @@ class _FeedScreenState extends State<FeedScreen> {
         username,
         profImage,
       );
-      if (res == "success") {
+      if (res == "Success") {
         setState(() {
           isLoading = false;
         });

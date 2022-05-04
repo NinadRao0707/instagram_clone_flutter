@@ -5,14 +5,15 @@ import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/resources/storage_methods.dart';
 
 class AuthMethods {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // Get user details
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-    DocumentSnapshot snap =
+    DocumentSnapshot documentSnapshot =
         await _firestore.collection('users').doc(currentUser.uid).get();
-    return model.User.fromSnap(snap);
+    return model.User.fromSnap(documentSnapshot);
   }
 
   // Sign up the user
@@ -38,13 +39,13 @@ class AuthMethods {
           password: password,
         );
 
-        String photoUrl = await StorageMethods().uploadImage(
+        String photoUrl = await StorageMethods().uploadImageToStorage(
           'profilePics',
           file,
           false,
         );
 
-        model.User user = model.User(
+        model.User _user = model.User(
           username: username,
           uid: cred.user!.uid,
           fullName: fullName,
@@ -57,9 +58,11 @@ class AuthMethods {
 
         // Add user to our database
         await _firestore.collection('users').doc(cred.user!.uid).set(
-              user.toJson(),
+              _user.toJson(),
             );
         res = "Success";
+      } else {
+        res = "Please enter all the details";
       }
     } catch (err) {
       res = err.toString();
@@ -75,15 +78,23 @@ class AuthMethods {
     String res = "Some error occurred";
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
+        // Log in user with email and password
         await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
         res = "Success";
+      } else {
+        res = "Please enter all the details";
       }
     } catch (err) {
       res = err.toString();
     }
     return res;
+  }
+
+  // Signout user
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }

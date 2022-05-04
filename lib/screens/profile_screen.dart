@@ -1,7 +1,12 @@
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
@@ -21,6 +26,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
+  Uint8List? _file;
+
+  _selectImage(BuildContext parentContext) async {
+    return showDialog(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Create a Post'),
+          children: <Widget>[
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text('Take a photo'),
+              onPressed: () async {
+                Navigator.pop(context);
+                Uint8List file = await pickImage(ImageSource.camera);
+                setState(() {
+                  _file = file;
+                });
+              },
+            ),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text('Choose from Gallery'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Uint8List file = await pickImage(ImageSource.gallery);
+                setState(() {
+                  _file = file;
+                });
+              },
+            ),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -70,6 +118,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundColor: mobileBackgroundColor,
               title: Text(userData['username']),
               centerTitle: false,
+              actions: [
+                IconButton(
+                  onPressed: () => _selectImage(context),
+                  icon: SvgPicture.asset(
+                    'assets/ic_add.svg',
+                    color: primaryColor,
+                    height: 23,
+                    width: 23,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 9,
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: SvgPicture.asset(
+                      'assets/ic_profilemore.svg',
+                      color: primaryColor,
+                      height: 19,
+                      width: 19,
+                    ),
+                  ),
+                ),
+              ],
             ),
             body: ListView(
               children: [
@@ -135,11 +208,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           FirebaseAuth.instance.currentUser!.uid == widget.uid
                               ? FollowButton(
+                                  text: 'Sign Out',
                                   backgroundColor: mobileBackgroundColor,
-                                  borderColor: const Color(0xff616161),
-                                  text: 'Edit Profile',
-                                  textColor: Colors.white,
-                                  function: () {},
+                                  textColor: primaryColor,
+                                  borderColor: Colors.grey,
+                                  function: () async {
+                                    await AuthMethods().signOut();
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen(),
+                                      ),
+                                    );
+                                  },
                                 )
                               : isFollowing
                                   ? FollowButton(
@@ -183,42 +264,94 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                const Divider(),
-                FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection('posts')
-                      .where('uid', isEqualTo: widget.uid)
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: (snapshot.data! as dynamic).docs.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 1.5,
-                        childAspectRatio: 1,
-                      ),
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot snap =
-                            (snapshot.data! as dynamic).docs[index];
-
-                        return Container(
-                          child: Image(
-                            image: NetworkImage(snap['postUrl']),
-                            fit: BoxFit.cover,
+                const SizedBox(
+                  height: 10,
+                ),
+                DefaultTabController(
+                  // Length of tabs
+                  length: 2,
+                  initialIndex: 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const TabBar(
+                        indicatorColor: primaryColor,
+                        labelColor: primaryColor,
+                        unselectedLabelColor: secondaryColor,
+                        tabs: [
+                          Tab(
+                            icon: Icon(
+                              Icons.view_comfortable_outlined,
+                              size: 36,
+                            ),
                           ),
-                        );
-                      },
-                    );
-                  },
+                          Tab(
+                            icon: Icon(
+                              Icons.assignment_ind_outlined,
+                              size: 31,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        height: 500, //height of TabBarView
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: Colors.grey,
+                              width: 0.5,
+                            ),
+                          ),
+                        ),
+                        child: TabBarView(
+                          children: <Widget>[
+                            FutureBuilder(
+                              future: FirebaseFirestore.instance
+                                  .collection('posts')
+                                  .where('uid', isEqualTo: widget.uid)
+                                  .get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                return GridView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      (snapshot.data! as dynamic).docs.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 2,
+                                    crossAxisSpacing: 2,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    DocumentSnapshot snap =
+                                        (snapshot.data! as dynamic).docs[index];
+
+                                    return Container(
+                                      child: Image(
+                                        image: NetworkImage(snap['postUrl']),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

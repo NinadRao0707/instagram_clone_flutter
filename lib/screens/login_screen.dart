@@ -66,8 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 44,
             ),
-
-            // Language selector
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
@@ -97,22 +95,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-
             const SizedBox(
-              height: 157,
+              height: 120,
             ),
-
             // SVG Image
             SvgPicture.asset(
               'assets/ic_instagram.svg',
               color: primaryColor,
               height: 54,
             ),
-
             const SizedBox(
               height: 37,
             ),
-
             Form(
               key: _formKey,
               child: Column(
@@ -128,11 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       textEditingController: _emailController,
                     ),
                   ),
-
                   const SizedBox(
                     height: 19,
                   ),
-
                   // Text field input for password
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -145,11 +137,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPass: true,
                     ),
                   ),
-
                   const SizedBox(
                     height: 19,
                   ),
-
                   // Button Login
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -189,11 +179,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-
             const SizedBox(
               height: 12,
             ),
-
             // Transitioning to signing up
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -226,11 +214,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-
             const SizedBox(
               height: 15,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
@@ -261,11 +247,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
               ],
             ),
-
             const SizedBox(
               height: 30,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
@@ -287,19 +271,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-
             const SizedBox(
               height: 130,
             ),
-
             const Divider(
               thickness: 1,
             ),
-
             const SizedBox(
               height: 10,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

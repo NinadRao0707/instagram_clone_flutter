@@ -23,7 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
         title: Row(
           children: <Widget>[
             Container(
-              width: 355,
+              width: 375,
               height: 33,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),

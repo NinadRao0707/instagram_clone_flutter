@@ -85,9 +85,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 150,
+              height: 140,
             ),
-
             Stack(
               children: [
                 _image != null
@@ -112,11 +111,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ],
             ),
-
             const SizedBox(
               height: 19,
             ),
-
             // Text field input for username
             Container(
               padding: const EdgeInsets.symmetric(
@@ -128,11 +125,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textEditingController: _fullNameController,
               ),
             ),
-
             const SizedBox(
               height: 19,
             ),
-
             // Text field input for username
             Container(
               padding: const EdgeInsets.symmetric(
@@ -144,11 +139,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textEditingController: _usernameController,
               ),
             ),
-
             const SizedBox(
               height: 19,
             ),
-
             // Text field input for password
             Container(
               padding: const EdgeInsets.symmetric(
@@ -161,11 +154,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isPass: true,
               ),
             ),
-
             const SizedBox(
               height: 19,
             ),
-
             // Text field input for bio
             Container(
               padding: const EdgeInsets.symmetric(
@@ -177,11 +168,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 textEditingController: _bioController,
               ),
             ),
-
             const SizedBox(
               height: 19,
             ),
-
             // Button Login
             Container(
               padding: const EdgeInsets.symmetric(
@@ -219,28 +208,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ),
-
             const SizedBox(
-              height: 140,
+              height: 110,
             ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(
-                  "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-                  style: TextStyle(
-                    color: Color(0xff616161),
-                    fontSize: 3,
-                  ),
-                ),
-              ],
+            const Divider(
+              thickness: 1,
             ),
-
             const SizedBox(
               height: 10,
             ),
-
             // Transitioning to signing up
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

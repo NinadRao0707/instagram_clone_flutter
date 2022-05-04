@@ -143,17 +143,8 @@ class _PhoneOrEmailState extends State<PhoneOrEmail> {
                   const SizedBox(
                     height: 240,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Text(
-                        "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-                        style: TextStyle(
-                          color: Color(0xff616161),
-                          fontSize: 3,
-                        ),
-                      ),
-                    ],
+                  const Divider(
+                    thickness: 1,
                   ),
                   const SizedBox(
                     height: 10,

@@ -19,7 +19,7 @@ class FireStoreMethods {
     String res = "Some error occurred";
 
     try {
-      String photoUrl = await StorageMethods().uploadImage(
+      String photoUrl = await StorageMethods().uploadImageToStorage(
         'posts',
         file,
         true,
@@ -48,11 +48,13 @@ class FireStoreMethods {
     return res;
   }
 
-  Future<void> likePost(
+  Future<String> likePost(
     String postId,
     String uid,
     List likes,
   ) async {
+    String res = "Some error occurred";
+
     try {
       if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
@@ -63,20 +65,22 @@ class FireStoreMethods {
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
-    } catch (e) {
-      print(
-        e.toString(),
-      );
+      res = 'Success';
+    } catch (err) {
+      res = err.toString();
     }
+    return res;
   }
 
-  Future<void> postComment(
+  Future<String> postComment(
     String postId,
     String text,
     String uid,
     String name,
     String profilePic,
   ) async {
+    String res = "Some error occurred";
+
     try {
       if (text.isNotEmpty) {
         String commentId = const Uuid().v1();
@@ -93,29 +97,35 @@ class FireStoreMethods {
           'commentId': commentId,
           'datePublished': DateTime.now(),
         });
+        res = 'Success';
+      } else {
+        res = "Please enter text";
       }
-    } catch (e) {
-      print(
-        e.toString(),
-      );
+    } catch (err) {
+      res = err.toString();
     }
+    return res;
   }
 
   // Delete Posts
-  Future<void> deletePost(String postId) async {
+  Future<String> deletePost(String postId) async {
+    String res = "Some error occurred";
+
     try {
       await _firestore.collection('posts').doc(postId).delete();
-    } catch (e) {
-      print(
-        e.toString(),
-      );
+      res = 'Success';
+    } catch (err) {
+      res = err.toString();
     }
+    return res;
   }
 
-  Future<void> followUser(
+  Future<String> followUser(
     String uid,
     String followId,
   ) async {
+    String res = "Some error occurred";
+
     try {
       DocumentSnapshot snap =
           await _firestore.collection('users').doc(uid).get();
@@ -138,8 +148,10 @@ class FireStoreMethods {
           'following': FieldValue.arrayUnion([followId])
         });
       }
-    } catch (e) {
-      print(e.toString());
+      res = 'Success';
+    } catch (err) {
+      res = err.toString();
     }
+    return res;
   }
 }

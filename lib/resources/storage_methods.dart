@@ -8,7 +8,7 @@ class StorageMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Add image to firebase storage
-  Future<String> uploadImage(
+  Future<String> uploadImageToStorage(
     String childName,
     Uint8List file,
     bool isPost,
@@ -21,7 +21,9 @@ class StorageMethods {
       ref = ref.child(id);
     }
 
+    // Putting in uint8list format so that upload task like a future but not future
     UploadTask uploadTask = ref.putData(file);
+
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;
