@@ -38,12 +38,12 @@
 
 ## Sections
 
-✔️ Login Screen
-✔️ Feed Screen
-✔️ Posts Screen
-✔️ Activity Feed Screen
-✔️ Profile Screen
-✔️ View all Comments Screen
+✔️ Login Screen\
+✔️ Feed Screen\
+✔️ Posts Screen\
+✔️ Activity Feed Screen\
+✔️ Profile Screen\
+✔️ View all Comments Screen\
 
 ## Getting started
 
