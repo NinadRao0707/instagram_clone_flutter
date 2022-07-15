@@ -10,7 +10,7 @@
 ⚡️Profile Pages\
 ⚡️Follow / Unfollow Users\
 ⚡️Add your own bio\
-⚡️Activity Feed showing recent likes / comments of your posts + new followers\
+⚡️Activity Feed showing recent likes / comments of your posts + new followers
 
 ## Screenshots
 <p>
